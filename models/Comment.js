@@ -1,46 +1,44 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
-const Post = require('./Post');
-const User = require('./User');
 
 class Comment extends Model {}
 
-Comment.init(
+  Comment.init(
   {
-    comment_id: {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement:true,
+      autoIncrement: true,
     },
-    author_username: {
+    commentContent: {
       type: DataTypes.STRING,
       allowNull: false,
-      //primaryKey: true,
-      references: {
-        model: 'User',
-        key: 'username',
-      },
+      unique: true,
     },
-    comment_body: {
-      type: DataTypes.STRING,
+    dateCreated: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
-    date_created: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    post_id: {
+    userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       references: {
-        model: 'Post',
-        key: 'post_id',
-      }
-    },
+        model: 'user',
+        key: 'id',
+      },
+    }, 
+    postId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'post',
+        key: 'id',
+      },
+    }, 
   },
   {
     sequelize,
+    timestamps: false,
     freezeTableName: true,
     underscored: true,
     modelName: 'comment',
